@@ -1,29 +1,35 @@
 class LinkedList {
   head = null;
   tail = null;
-  size = null;
-
-  constructor(node) {
-    this.head = node;
-    this.tail = node;
-    this.size = 1;
-  }
+  size = 0;
 
   createNode(value) {
     return new LinkedNode(value);
   }
 
   append(value) {
-    this.tail.nextNode = this.createNode(value);
-    this.tail = tail.nextNode;
-    this.size++;
+    if (this.size == 0) {
+      this.head = this.createNode(value);
+      this.tail = this.head;
+      size++;
+    } else {
+      this.tail.nextNode = this.createNode(value);
+      this.tail = tail.nextNode;
+      this.size++;
+    }
   }
 
   prepend(value) {
-    const newNode = this.createNode(value);
-    newNode.nextNode = head;
-    head = newNode;
-    this.size++;
+    if (this.size == 0) {
+      this.head = this.createNode(value);
+      this.tail = this.head;
+      size++;
+    } else {
+      const newNode = this.createNode(value);
+      newNode.nextNode = head;
+      head = newNode;
+      this.size++;
+    }
   }
 
   pop() {
@@ -46,9 +52,33 @@ class LinkedList {
     return current;
   }
 
-  contains(value) {}
+  contains(value) {
+    let current;
+    current = this.head;
+    while (current != null) {
+      if (current.value === value) {
+        return true;
+      } else {
+        current = current.nextNode;
+      }
+    }
+    return false;
+  }
 
-  find(value) {}
+  find(value) {
+    let current;
+    let index = 0;
+    current = this.head;
+    while (current != null) {
+      if (current.value === value) {
+        return index;
+      } else {
+        current = current.nextNode;
+        index++;
+      }
+    }
+    return -1;
+  }
 
   toString() {
     let current;
@@ -60,8 +90,47 @@ class LinkedList {
     string.concat(" null");
     return string;
   }
-  insertAt(node, index) {}
-  removeAt(index) {}
+
+  insertAt(value, index) {
+    if (index == 0) {
+      this.prepend(value);
+      return;
+    }
+    if (index >= this.size) {
+      console.log("Error - no such index exists");
+      return;
+    }
+    let current;
+    const newNode = this.createNode(value);
+    current = this.head;
+    for (let i = 0; i < index - 1; i++) {
+      current = current.nextNode;
+    }
+    newNode.nextNode = current.nextNode;
+    current.nextNode = newNode;
+    this.size++;
+  }
+
+  removeAt(index) {
+    if (index == 0) {
+      const newHead = this.head.nextNode;
+      this.head.nextNode = null;
+      this.head = newHead;
+      return;
+    }
+    if (index == this.size - 1) {
+      this.pop();
+    }
+    let current;
+    let lastNode;
+    current = this.head;
+    for (let i = 0; i < index - 1; i++) {
+      current = current.nextNode;
+    }
+    lastNode = current;
+    current = current.nextNode;
+    lastNode.newNode = current.newNode;
+  }
 }
 
 class LinkedNode {
