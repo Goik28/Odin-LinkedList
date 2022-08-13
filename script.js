@@ -11,10 +11,10 @@ class LinkedList {
     if (this.size == 0) {
       this.head = this.createNode(value);
       this.tail = this.head;
-      size++;
+      this.size++;
     } else {
       this.tail.nextNode = this.createNode(value);
-      this.tail = tail.nextNode;
+      this.tail = this.tail.nextNode;
       this.size++;
     }
   }
@@ -26,8 +26,8 @@ class LinkedList {
       size++;
     } else {
       const newNode = this.createNode(value);
-      newNode.nextNode = head;
-      head = newNode;
+      newNode.nextNode = this.head;
+      this.head = newNode;
       this.size++;
     }
   }
@@ -44,6 +44,9 @@ class LinkedList {
   }
 
   at(index) {
+    if (index >= this.size) {
+      return null;
+    }
     let current;
     current = this.head;
     for (let i = 0; i < index; i++) {
@@ -55,13 +58,13 @@ class LinkedList {
   contains(value) {
     let current;
     current = this.head;
-    while (current != null) {
+    do {
       if (current.value === value) {
         return true;
       } else {
         current = current.nextNode;
       }
-    }
+    } while (current !== null);
     return false;
   }
 
@@ -77,17 +80,18 @@ class LinkedList {
         index++;
       }
     }
-    return -1;
+    return null;
   }
 
   toString() {
     let current;
-    let string = "First: ";
+    let string = "";
     current = this.head;
     do {
-      string.concat(current.value + " -> ");
-    } while (current.nextNode != null);
-    string.concat(" null");
+      string = string + current.value + " -> ";
+      current = current.nextNode;
+    } while (current !== null);
+    string = string + "null";
     return string;
   }
 
@@ -112,14 +116,20 @@ class LinkedList {
   }
 
   removeAt(index) {
+    if (index >= this.size) {
+      return null;
+    }
     if (index == 0) {
       const newHead = this.head.nextNode;
       this.head.nextNode = null;
       this.head = newHead;
+      this.size--
       return;
     }
     if (index == this.size - 1) {
       this.pop();
+      this.size--
+      return;
     }
     let current;
     let lastNode;
@@ -129,7 +139,8 @@ class LinkedList {
     }
     lastNode = current;
     current = current.nextNode;
-    lastNode.newNode = current.newNode;
+    lastNode.nextNode = current.nextNode;
+    this.size--
   }
 }
 
@@ -141,3 +152,29 @@ class LinkedNode {
     this.value = value;
   }
 }
+
+//testing
+const ll = new LinkedList();
+ll.append("c");
+ll.append("d");
+ll.append("f");
+ll.prepend("b");
+ll.append("g");
+ll.prepend("a");
+ll.insertAt("e", 4);
+console.log(ll.toString());
+console.log(ll.contains("g"));
+ll.pop();
+console.log(ll.toString());
+console.log(ll.contains("g"));
+console.log(ll.at(1));
+console.log(ll.at(7));
+console.log(ll.at(5));
+console.log(ll.find("b"));
+console.log(ll.find("g"));
+console.log(ll.find("f"));
+ll.removeAt(1);
+console.log(ll.toString());
+ll.removeAt(7);
+ll.removeAt(4);
+console.log(ll.toString());
